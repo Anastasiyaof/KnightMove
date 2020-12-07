@@ -25,16 +25,17 @@ function drew() {
 }
 
 drew();
+let leters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 let field = [];
+let options = [];
 function makeArray() {
-    let leters = ["A", "B", "C", "D", "E", "F", "G", "H"];
     let rows = document.querySelectorAll('.row');
     for (let i = 0; i < rows.length; i++) {
         let row = [];
         let arr = rows[i].querySelectorAll('.cell');
-        for (let i = 0; i < arr.length; i++) {
-            arr[i].id = leters[i];
-            row.push(arr[i]);
+        for (let m = 0; m < arr.length; m++) {
+            arr[m].setAttribute('name',`${leters[m]}`);
+            row.push(arr[m]);
         }
         field.push(row);
     }
@@ -43,23 +44,39 @@ function makeArray() {
 makeArray();
 console.log(field);
 
+function showOptions(from) {
+    let cell = from.getAttribute('name');
+    let row = from.parentElement.id-1;
+    let cellIndex = leters.indexOf(cell);
+      for(let i = -2; i<3;i++) {
+          if(i==0)continue;
+         if(Math.abs(i) == 2) {
+            n = 1;
+         } else n =2;
+         options.push(field[row+i][cellIndex+n]);
+         options.push(field[row+i][cellIndex -n]);
+      }
+      
+      
+       options.forEach(item => {
+          if(item != undefined) item.classList.toggle('options')} )
+      
+    
+}
 
 let selecteds = [];
+
 function select(event) {
     let cell = event.target;
     selecteds.push(cell);
     selecteds.forEach(item => item.classList.toggle('selected'));
-    //console.log(selecteds);
     if (selecteds.length > 1) selecteds.shift();
-    //console.log(`after ${selecteds}`);
-    //console.log(selecteds);
 }
 
 let fieldElem = document.querySelector('.field');
 fieldElem.addEventListener('click', (event) => {
-    //console.log(`before`);
-    //console.log(selecteds);
     select(event);
+    showOptions(event.target);
 });
 
 
